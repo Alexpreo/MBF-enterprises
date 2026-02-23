@@ -6,6 +6,7 @@ import { PageTransition } from "@/components/PageTransition";
 import { ServiceCard } from "@/components/ServiceCard";
 import { AnimatedText } from "@/components/AnimatedText";
 import { ScrollReveal } from "@/components/ScrollReveal";
+import { FeaturedCarousel } from "@/components/FeaturedCarousel";
 import { Hammer, Layers, Sprout } from "lucide-react";
 
 export default function Home() {
@@ -59,6 +60,10 @@ export default function Home() {
       </ScrollReveal>
 
       <ScrollReveal>
+        <FeaturedCarousel />
+      </ScrollReveal>
+
+      <ScrollReveal>
         <section className="border-y border-white/5 bg-surface/50 py-12 lg:py-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 gap-8 md:grid-cols-3 md:gap-12">
@@ -67,11 +72,11 @@ export default function Home() {
                 <p className="mt-1 text-sm font-medium uppercase tracking-wider text-text-muted">Years in business</p>
               </div>
               <div className="text-center">
-                <p className="text-3xl font-bold tabular-nums text-accent sm:text-4xl">500+</p>
+                <p className="text-3xl font-bold tabular-nums text-accent sm:text-4xl">250+</p>
                 <p className="mt-1 text-sm font-medium uppercase tracking-wider text-text-muted">Projects completed</p>
               </div>
               <div className="col-span-2 text-center md:col-span-1">
-                <p className="text-3xl font-bold tabular-nums text-accent sm:text-4xl">Local</p>
+                <p className="text-3xl font-bold tabular-nums text-accent sm:text-4xl">Metro Vancouver</p>
                 <p className="mt-1 text-sm font-medium uppercase tracking-wider text-text-muted">Service area</p>
               </div>
             </div>
@@ -105,6 +110,24 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <ScrollReveal>
+        <section className="border-t border-white/5 bg-surface/50 py-16 lg:py-20">
+          <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+            <p className="text-xl font-medium text-text sm:text-2xl">
+              Ready to transform your outdoor space?
+            </p>
+            <div className="mt-6">
+              <Link
+                href="/contact"
+                className="inline-flex min-h-[44px] items-center justify-center rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-bg shadow-[0_0_20px_rgba(212,175,55,0.25)] transition-all hover:bg-accent-light hover:shadow-[0_0_24px_rgba(212,175,55,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+              >
+                Request a consultation
+              </Link>
+            </div>
+          </div>
+        </section>
+      </ScrollReveal>
     </PageTransition>
   );
 }
