@@ -72,22 +72,21 @@ export default function Portfolio() {
         </div>
 
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
-          <AnimatePresence mode="popLayout">
-            {filtered.map((item, index) => (
+          <AnimatePresence mode="sync">
+            {filtered.map((item) => (
               <motion.button
                 key={item.id}
                 type="button"
-                layout
-                initial={{ opacity: 0, scale: 0.95 }}
+                initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
+                exit={{ opacity: 0, scale: 0.98 }}
                 transition={{ duration: 0.2 }}
                 className="group relative aspect-square overflow-hidden rounded-xl border border-white/10 bg-surface bg-gradient-to-br from-surface via-accent/5 to-surface text-left"
                 onClick={() => setLightboxIndex(PORTFOLIO_ITEMS.findIndex((i) => i.id === item.id))}
                 aria-label={`View project: ${item.caption}`}
               >
                 <div className="absolute inset-0 bg-accent/0 transition-colors group-hover:bg-accent/10" />
-                <div className="absolute bottom-0 left-0 right-0 p-3 opacity-0 transition-opacity group-hover:opacity-100">
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 opacity-100 md:opacity-0 md:transition-opacity md:group-hover:opacity-100">
                   <p className="truncate text-xs font-medium text-text">{item.caption}</p>
                   <p className="text-xs text-text-muted">{item.category}</p>
                 </div>
@@ -101,8 +100,9 @@ export default function Portfolio() {
         {lightboxIndex !== null && (
           <>
             <motion.div
+              key="portfolio-lightbox-backdrop"
               role="presentation"
-              className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm"
+              className="fixed inset-0 z-[110] bg-black/80 backdrop-blur-sm"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -110,10 +110,11 @@ export default function Portfolio() {
               onClick={() => setLightboxIndex(null)}
             />
             <motion.div
+              key="portfolio-lightbox-dialog"
               role="dialog"
               aria-modal="true"
               aria-label="Project detail"
-              className="fixed inset-4 z-50 flex flex-col items-center justify-center sm:inset-8"
+              className="fixed inset-4 z-[110] flex flex-col items-center justify-center sm:inset-8"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}

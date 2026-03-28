@@ -2,31 +2,13 @@ import type { Metadata } from "next";
 import { MessageCircle, PencilRuler, Hammer } from "lucide-react";
 import { PageTransition } from "@/components/PageTransition";
 import { ScrollReveal } from "@/components/ScrollReveal";
+import { SERVICE_CATEGORIES } from "@/data/services";
 
 export const metadata: Metadata = {
-  title: "Services | MBF Enterprises",
+  title: "Services | Buddy Landscaping",
   description:
-    "Full design and remodels, retaining walls, water features, and premium artificial turf. High-end hardscaping and construction tailored to your vision.",
+    "Hardscaping, outdoor living, water features, planting, premium turf, and full exterior design. Retaining walls, patios, fountains, koi ponds, kitchens, fire features, and phased remodels across Metro Vancouver.",
 };
-
-const SERVICES = [
-  {
-    title: "Full Design & Remodels",
-    body: "A complete overhaul of your exterior space. We handle everything from the initial architectural drafting to the final stone laid, ensuring a cohesive, breathtaking result that seamlessly extends your living space into the outdoors.",
-  },
-  {
-    title: "Retaining Walls & Structural Hardscaping",
-    body: "Engineered for longevity and designed for beauty. Our retaining walls do more than just hold back earth—they create dynamic, multi-level terraces that maximize your usable space and add immense value to your property.",
-  },
-  {
-    title: "Fountains & Water Features",
-    body: "Introduce movement and tranquility to your landscape. We design and install custom water features, ranging from modern, minimalist spillways to naturalistic rock waterfalls, all built with commercial-grade pumps and filtration.",
-  },
-  {
-    title: "Premium Artificial Grass",
-    body: "Achieve the perfect lawn, all year round. We install ultra-realistic, high-drainage artificial turf that stands up to heavy use and extreme weather, eliminating the need for constant watering and maintenance.",
-  },
-];
 
 export default function Services() {
   return (
@@ -36,7 +18,7 @@ export default function Services() {
           Our Services
         </h1>
         <p className="mt-6 max-w-2xl text-center text-lg text-text-muted">
-          High-end hardscaping, design, and construction tailored to your vision.
+          High-end hardscaping, water, planting, and outdoor living—designed and built as one system.
         </p>
       </section>
 
@@ -80,21 +62,27 @@ export default function Services() {
       </ScrollReveal>
 
       <div className="mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
-        {SERVICES.map((service, index) => (
-          <ScrollReveal key={service.title}>
-            <section className="grid gap-8 py-16 lg:grid-cols-2 lg:items-center lg:gap-16">
+        {SERVICE_CATEGORIES.map((category, index) => (
+          <ScrollReveal key={category.id}>
+            <section
+              id={category.id}
+              className="grid gap-8 py-16 lg:grid-cols-2 lg:items-start lg:gap-16"
+            >
               <div className={index % 2 === 1 ? "lg:order-2" : ""}>
-                <h2 className="text-2xl font-bold tracking-tight text-text sm:text-3xl">
-                  {service.title}
-                </h2>
-                <p className="mt-4 text-base leading-relaxed text-text-muted">{service.body}</p>
+                <h2 className="text-2xl font-bold tracking-tight text-text sm:text-3xl">{category.title}</h2>
+                <p className="mt-4 text-base leading-relaxed text-text-muted">{category.intro}</p>
+                <ul className="mt-6 list-disc space-y-2 pl-5 text-sm leading-relaxed text-text-muted sm:text-base">
+                  {category.bullets.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
               </div>
               <div
-                className={`aspect-[4/3] w-full rounded-xl border border-white/10 bg-surface bg-gradient-to-br from-surface via-accent/5 to-surface ${
+                className={`aspect-[4/3] w-full shrink-0 rounded-xl border border-white/10 bg-surface bg-gradient-to-br from-surface via-accent/5 to-surface ${
                   index % 2 === 1 ? "lg:order-1" : ""
                 }`}
                 role="img"
-                aria-label="Image placeholder"
+                aria-label={`${category.title} image placeholder`}
               />
             </section>
           </ScrollReveal>

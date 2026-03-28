@@ -1,23 +1,14 @@
 "use client";
 
-import { motion } from "framer-motion";
-
-const DEFAULT_TRANSITION = { duration: 0.35 };
-
+/**
+ * Plain wrapper — no transform/animation on the page root.
+ * Framer Motion transforms here break `position: fixed` for descendants (lightboxes, modals) on mobile Safari.
+ */
 type PageTransitionProps = {
   children: React.ReactNode;
   className?: string;
 };
 
 export function PageTransition({ children, className }: PageTransitionProps) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={DEFAULT_TRANSITION}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
+  return <div className={className}>{children}</div>;
 }

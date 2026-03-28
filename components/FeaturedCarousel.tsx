@@ -7,18 +7,50 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const AUTO_ADVANCE_MS = 5000;
+const STORY_SECTION_ID = "project-story";
+const __DEV__ = process.env.NODE_ENV !== "production";
 
 export type FeaturedSlide = {
   id: string;
+  title: string;
   caption: string;
+  phase: "Hook" | "Design" | "Build" | "Finish" | "Reveal";
   imageSrc?: string;
+  videoSrc?: string;
+  posterSrc?: string;
 };
 
 const DEFAULT_SLIDES: FeaturedSlide[] = [
-  { id: "1", caption: "Hardscaping" },
-  { id: "2", caption: "Artificial turf" },
-  { id: "3", caption: "Water feature" },
-  { id: "4", caption: "Full remodel" },
+  {
+    id: "hook",
+    phase: "Hook",
+    title: "Vision Aligned",
+    caption: "We begin by mapping your space and identifying the highest-impact focal moments.",
+  },
+  {
+    id: "design",
+    phase: "Design",
+    title: "Architectural Planning",
+    caption: "Materials, elevations, and pathways are orchestrated into one cohesive outdoor flow.",
+  },
+  {
+    id: "build",
+    phase: "Build",
+    title: "Precision Build",
+    caption: "Hardscape structure is installed with exact grading, drainage, and long-term performance in mind.",
+  },
+  {
+    id: "finish",
+    phase: "Finish",
+    title: "Premium Finish",
+    caption: "Lighting, textures, and greenery are tuned to elevate day and evening ambiance.",
+  },
+  {
+    id: "reveal",
+    phase: "Reveal",
+    title: "Signature Reveal",
+    caption: "The completed transformation delivers a space designed to be lived in and remembered.",
+  },
 ];
 
 type FeaturedCarouselProps = {
@@ -31,12 +63,6 @@ export function FeaturedCarousel({ slides = DEFAULT_SLIDES }: FeaturedCarouselPr
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const count = slides.length;
-  const goTo = useCallback(
-    (next: number) => {
-      setIndex((i) => (next < 0 ? count - 1 : next >= count ? 0 : next));
-    },
-    [count]
-  );
   const goNext = useCallback(() => setIndex((i) => (i + 1) % count), [count]);
   const goPrev = useCallback(() => setIndex((i) => (i - 1 + count) % count), [count]);
 
@@ -44,8 +70,16 @@ export function FeaturedCarousel({ slides = DEFAULT_SLIDES }: FeaturedCarouselPr
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReducedMotion(mq.matches);
     const handler = () => setReducedMotion(mq.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
+    if (typeof mq.addEventListener === "function") {
+      mq.addEventListener("change", handler);
+      return () => mq.removeEventListener("change", handler);
+    }
+    const legacy = mq as MediaQueryList & {
+      addListener: (cb: () => void) => void;
+      removeListener: (cb: () => void) => void;
+    };
+    legacy.addListener(handler);
+    return () => legacy.removeListener(handler);
   }, []);
 
   const scheduleNext = useCallback(() => {
@@ -76,6 +110,20 @@ export function FeaturedCarousel({ slides = DEFAULT_SLIDES }: FeaturedCarouselPr
     return () => document.removeEventListener("visibilitychange", handleVisibility);
   }, [reducedMotion, count, scheduleNext]);
 
+  useEffect(() => {
+    if (!__DEV__) return;
+    const activeSlide = slides[index];
+    console.debug("[HomepageStoryRail] state", {
+      sectionId: STORY_SECTION_ID,
+      totalPanels: count,
+      activeIndex: index,
+      activeId: activeSlide?.id,
+      activePhase: activeSlide?.phase,
+      reducedMotion,
+      autoAdvanceMs: reducedMotion ? null : AUTO_ADVANCE_MS,
+    });
+  }, [slides, index, count, reducedMotion]);
+
   const resetAutoAdvance = useCallback(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -98,89 +146,147 @@ export function FeaturedCarousel({ slides = DEFAULT_SLIDES }: FeaturedCarouselPr
   };
 
   const slide = slides[index];
+  const hasVideo = Boolean(slide.videoSrc);
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24" aria-label="A Glimpse of What We Do">
-      <h2 className="text-center text-2xl font-bold tracking-tight text-text sm:text-3xl lg:text-4xl">
-        A Glimpse of What We Do
-      </h2>
-
-      <div className="relative mt-10">
-        <div className="overflow-hidden rounded-xl border border-white/10">
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={slide.id}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="relative aspect-video w-full"
-            >
-              {slide.imageSrc ? (
-                <Image
-                  src={slide.imageSrc}
-                  alt={slide.caption}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1280px) 100vw, 1280px"
-                />
-              ) : (
-                <div
-                  className="absolute inset-0 bg-surface bg-gradient-to-br from-surface via-accent/5 to-surface flex items-center justify-center"
-                  role="img"
-                  aria-label={slide.caption}
-                >
-                  <span className="text-lg font-medium text-text-muted sm:text-xl">{slide.caption}</span>
-                </div>
-              )}
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {count > 1 && (
-          <>
-            <button
-              type="button"
-              onClick={handlePrev}
-              className="absolute left-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-surface/90 text-text-muted transition-colors hover:bg-surface hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg sm:left-4"
-              aria-label="Previous slide"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <button
-              type="button"
-              onClick={handleNext}
-              className="absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-surface/90 text-text-muted transition-colors hover:bg-surface hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg sm:right-4"
-              aria-label="Next slide"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
-
-            <div className="mt-4 flex justify-center gap-2" role="tablist" aria-label="Slide navigation">
-              {slides.map((s, i) => (
-                <button
-                  key={s.id}
-                  type="button"
-                  role="tab"
-                  aria-selected={i === index}
-                  aria-label={`Slide ${i + 1}: ${s.caption}`}
-                  onClick={() => handleDot(i)}
-                  className={`h-2 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg ${
-                    i === index ? "w-8 bg-accent" : "w-2 bg-white/30 hover:bg-white/50"
-                  }`}
-                />
-              ))}
-            </div>
-          </>
-        )}
+    <section
+      id={STORY_SECTION_ID}
+      className="scroll-mt-24 mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24"
+      aria-label="Project story rail"
+    >
+      <div className="mx-auto max-w-3xl text-center">
+        <p className="text-sm font-semibold uppercase tracking-[0.16em] text-accent/90">Cinematic Story Rail</p>
+        <h2 className="mt-3 text-2xl font-bold tracking-tight text-text sm:text-3xl lg:text-4xl">
+          How We Build Signature Outdoor Spaces
+        </h2>
+        <p className="mt-4 text-base text-text-muted sm:text-lg">
+          Scroll the story, preview our process, and then explore full projects when your new photo and video library lands.
+        </p>
       </div>
 
-      <div className="mt-8 text-center">
+      <div className="relative mt-10 overflow-hidden rounded-2xl border border-white/10 bg-surface/60">
+        <div className="grid items-stretch gap-0 lg:grid-cols-[1.35fr_1fr]">
+          <div className="relative aspect-[16/10] w-full lg:aspect-auto lg:min-h-[500px]">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={slide.id}
+                initial={reducedMotion ? false : { opacity: 0, y: 16 }}
+                animate={reducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+                exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: -12 }}
+                transition={{ duration: reducedMotion ? 0.15 : 0.4, ease: "easeOut" }}
+                className="absolute inset-0"
+              >
+                {hasVideo ? (
+                  <video
+                    key={slide.id}
+                    className="h-full w-full object-cover"
+                    autoPlay={!reducedMotion}
+                    muted
+                    loop={!reducedMotion}
+                    playsInline
+                    preload="metadata"
+                    poster={slide.posterSrc}
+                    aria-label={slide.title}
+                  >
+                    <source src={slide.videoSrc} type="video/mp4" />
+                  </video>
+                ) : slide.imageSrc ? (
+                  <Image
+                    src={slide.imageSrc}
+                    alt={slide.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 60vw"
+                    loading={index === 0 ? "eager" : "lazy"}
+                    priority={index === 0}
+                  />
+                ) : (
+                  <div
+                    className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-surface via-accent/10 to-surface"
+                    role="img"
+                    aria-label={slide.title}
+                  >
+                    <div className="mx-auto flex max-w-sm flex-col items-center px-6 text-center">
+                      <span className="text-xs font-semibold uppercase tracking-[0.18em] text-accent/80">
+                        {slide.phase}
+                      </span>
+                      <h3 className="mt-2 text-2xl font-semibold text-text sm:text-3xl">{slide.title}</h3>
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          <div className="flex flex-col justify-between p-6 sm:p-8">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent/80">
+                Step {index + 1} of {count} - {slide.phase}
+              </p>
+              <h3 className="mt-3 text-2xl font-semibold tracking-tight text-text sm:text-3xl">{slide.title}</h3>
+              <p className="mt-4 text-base leading-relaxed text-text-muted">{slide.caption}</p>
+            </div>
+
+            <div className="mt-8">
+              <div className="mb-5" role="tablist" aria-label="Story rail progress">
+                <div className="mb-3 flex items-center justify-between text-xs font-medium uppercase tracking-wider text-text-muted">
+                  <span>Progress</span>
+                  <span>{Math.round(((index + 1) / count) * 100)}%</span>
+                </div>
+                <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${count}, minmax(0, 1fr))` }}>
+                  {slides.map((s, i) => (
+                    <button
+                      key={s.id}
+                      type="button"
+                      role="tab"
+                      aria-selected={i === index}
+                      aria-label={`Go to ${s.phase}: ${s.title}`}
+                      onClick={() => handleDot(i)}
+                      className={`h-2 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg ${
+                        i === index ? "bg-accent" : "bg-white/20 hover:bg-white/35"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {count > 1 && (
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={handlePrev}
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-surface text-text-muted transition-colors hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+                    aria-label="Previous story panel"
+                  >
+                    <ChevronLeft className="h-5 w-5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleNext}
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-surface text-text-muted transition-colors hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+                    aria-label="Next story panel"
+                  >
+                    <ChevronRight className="h-5 w-5" />
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-8 flex flex-col items-center justify-center gap-4 text-center sm:flex-row">
         <Link
           href="/portfolio"
-          className="inline-flex min-h-[44px] items-center justify-center rounded-lg border border-accent/50 px-6 py-3 text-sm font-semibold text-accent transition-colors hover:bg-accent/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+          className="inline-flex min-h-[44px] items-center justify-center rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-bg shadow-[0_0_20px_rgba(212,175,55,0.22)] transition-all hover:bg-accent-light hover:shadow-[0_0_24px_rgba(212,175,55,0.34)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
         >
           View full portfolio
+        </Link>
+        <Link
+          href="/contact"
+          className="inline-flex min-h-[44px] items-center justify-center rounded-lg border border-accent/50 px-6 py-3 text-sm font-semibold text-accent transition-colors hover:bg-accent/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+        >
+          Start your project
         </Link>
       </div>
     </section>

@@ -21,7 +21,7 @@ export function Footer() {
               href="/"
               className="text-xl font-semibold tracking-tight text-text transition-colors hover:text-accent"
             >
-              MBF Enterprises
+              Buddy Landscaping
             </Link>
             <p className="mt-3 max-w-sm text-sm text-text-muted">
               Premium hardscaping, custom design, and flawless execution for properties that demand the best.
@@ -47,10 +47,11 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-text">
+            <h3 className="text-2xl font-semibold text-text">
               Contact
             </h3>
-            <ul className="mt-4 space-y-3 text-sm text-text-muted">
+            <p className="mt-1 text-lg font-medium text-text">Jack Fang - Owner</p>
+            <ul className="mt-3 space-y-3 text-sm text-text-muted">
               <li className="flex items-center gap-2">
                 <Phone className="h-4 w-4 shrink-0 text-accent/80" aria-hidden />
                 <span>(778) 386-1862</span>
@@ -64,7 +65,7 @@ export function Footer() {
         </div>
 
         <div className="mt-12 border-t border-white/5 pt-8 text-center text-sm text-text-muted">
-          &copy; {currentYear} MBF Enterprises. All rights reserved.
+          &copy; {currentYear} MDF Enterprises. All rights reserved.
         </div>
       </div>
     </footer>

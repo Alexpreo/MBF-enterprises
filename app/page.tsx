@@ -7,7 +7,18 @@ import { ServiceCard } from "@/components/ServiceCard";
 import { AnimatedText } from "@/components/AnimatedText";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { FeaturedCarousel } from "@/components/FeaturedCarousel";
-import { Hammer, Layers, Sprout } from "lucide-react";
+import { FEATURED_SERVICES, type FeaturedServiceId } from "@/data/services";
+import type { LucideIcon } from "lucide-react";
+import { Droplets, Flame, Hammer, LayoutGrid, Layers, Sprout } from "lucide-react";
+
+const FEATURED_ICONS: Record<FeaturedServiceId, LucideIcon> = {
+  "full-design-remodels": Hammer,
+  "retaining-hardscape": Layers,
+  "patios-paving": LayoutGrid,
+  "water-features": Droplets,
+  "outdoor-living": Flame,
+  "planting-turf": Sprout,
+};
 
 export default function Home() {
   return (
@@ -25,23 +36,33 @@ export default function Home() {
           <p className="mt-6 max-w-2xl text-lg text-text-muted sm:text-xl">
             Premium hardscaping, custom design, and flawless execution for properties that demand the best.
           </p>
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <div className="mt-10 flex flex-col items-center gap-4">
             <motion.div whileTap={{ scale: 0.98 }}>
               <Link
-                href="/portfolio"
-                className="inline-flex min-h-[44px] min-w-[180px] items-center justify-center rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-bg shadow-[0_0_20px_rgba(212,175,55,0.25)] transition-all hover:bg-accent-light hover:shadow-[0_0_24px_rgba(212,175,55,0.35)]"
+                href="#project-story"
+                className="inline-flex min-h-[44px] min-w-[200px] items-center justify-center rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-bg shadow-[0_0_20px_rgba(212,175,55,0.25)] transition-all hover:bg-accent-light hover:shadow-[0_0_24px_rgba(212,175,55,0.35)]"
               >
-                View Our Portfolio
+                Explore the story
               </Link>
             </motion.div>
-            <motion.div whileTap={{ scale: 0.98 }}>
-              <Link
-                href="/contact"
-                className="inline-flex min-h-[44px] min-w-[180px] items-center justify-center rounded-lg border border-accent/50 px-6 py-3 text-sm font-semibold text-accent transition-colors hover:bg-accent/10"
-              >
-                Request a Consultation
-              </Link>
-            </motion.div>
+            <div className="flex w-full max-w-md flex-col items-center justify-between gap-4 sm:flex-row">
+              <motion.div whileTap={{ scale: 0.98 }}>
+                <Link
+                  href="/portfolio"
+                  className="inline-flex min-h-[44px] min-w-[180px] items-center justify-center rounded-lg border border-white/15 bg-black/30 px-6 py-3 text-sm font-semibold text-text transition-colors hover:bg-black/45"
+                >
+                  View Our Portfolio
+                </Link>
+              </motion.div>
+              <motion.div whileTap={{ scale: 0.98 }}>
+                <Link
+                  href="/contact"
+                  className="inline-flex min-h-[44px] min-w-[180px] items-center justify-center rounded-lg border border-white/15 bg-black/30 px-6 py-3 text-sm font-semibold text-text transition-colors hover:bg-black/45"
+                >
+                  Request a Consultation
+                </Link>
+              </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -53,7 +74,7 @@ export default function Home() {
               Craftsmanship Without Compromise.
             </h2>
             <p className="mt-6 text-base leading-relaxed text-text-muted sm:text-lg">
-              At MBF Enterprises, we don&apos;t just build landscapes; we engineer outdoor sanctuaries. Specializing in high-end hardscaping and complete exterior transformations, we bring architectural precision and premium materials to every project. From custom retaining walls to lush artificial turf and elegant water features, your vision is our blueprint.
+              At Buddy Landscaping, we don&apos;t just build landscapes; we engineer outdoor sanctuaries. Specializing in high-end hardscaping and complete exterior transformations, we bring architectural precision and premium materials to every project. From custom retaining walls to lush artificial turf and elegant water features, your vision is our blueprint.
             </p>
           </div>
         </section>
@@ -92,21 +113,22 @@ export default function Home() {
             </h2>
           </ScrollReveal>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <ServiceCard
-              title="Full-Scale Remodels"
-              description="Comprehensive exterior design and construction to completely redefine your property."
-              icon={Hammer}
-            />
-            <ServiceCard
-              title="Architectural Hardscaping"
-              description="Structural elegance including custom retaining walls, patios, and stone masonry."
-              icon={Layers}
-            />
-            <ServiceCard
-              title="Premium Artificial Turf"
-              description="Flawless, zero-maintenance greenery installed with precision drainage systems."
-              icon={Sprout}
-            />
+            {FEATURED_SERVICES.map((service) => (
+              <ServiceCard
+                key={service.id}
+                title={service.title}
+                description={service.shortDescription}
+                icon={FEATURED_ICONS[service.id]}
+              />
+            ))}
+          </div>
+          <div className="mt-10 text-center">
+            <Link
+              href="/services"
+              className="inline-flex min-h-[44px] items-center justify-center rounded-lg border border-accent/50 px-6 py-3 text-sm font-semibold text-accent transition-colors hover:bg-accent/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+            >
+              View all services
+            </Link>
           </div>
         </div>
       </section>

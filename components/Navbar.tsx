@@ -36,7 +36,7 @@ export function Navbar() {
   return (
     <>
       <header
-        className="sticky top-0 z-50 border-b border-white/5 bg-surface/80 backdrop-blur-md"
+        className="sticky top-0 z-[60] border-b border-white/5 bg-surface/80 backdrop-blur-md"
         role="banner"
       >
         <nav
@@ -47,7 +47,7 @@ export function Navbar() {
             href="/"
             className="text-lg font-semibold tracking-tight text-text transition-colors hover:text-accent"
           >
-            MBF Enterprises
+            Buddy Landscaping
           </Link>
 
           <ul className="hidden items-center gap-8 md:flex">
@@ -97,23 +97,25 @@ export function Navbar() {
         {mobileOpen && (
           <>
             <motion.div
+              key="mobile-menu-backdrop"
               role="presentation"
-              className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm md:hidden"
+              className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm md:hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
               onClick={() => setMobileOpen(false)}
               onKeyDown={(e) => e.key === "Escape" && setMobileOpen(false)}
             />
             <motion.aside
+              key="mobile-menu-drawer"
               role="dialog"
               aria-label="Mobile menu"
-              className="fixed right-0 top-0 z-50 flex h-full w-full max-w-sm flex-col border-l border-white/5 bg-surface shadow-xl md:hidden"
+              className="fixed right-0 top-0 z-[100] flex h-full w-full max-w-sm flex-col border-l border-white/5 bg-surface shadow-xl md:hidden"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              transition={{ type: "tween", duration: 0.25 }}
+              transition={{ type: "spring", stiffness: 220, damping: 26, mass: 0.95 }}
             >
               <div className="flex h-16 items-center justify-between px-4">
                 <span className="text-lg font-semibold text-text">Menu</span>
@@ -130,9 +132,9 @@ export function Navbar() {
                 {NAV_LINKS.map(({ href, label }, i) => (
                   <motion.li
                     key={href}
-                    initial={{ opacity: 0, x: 16 }}
+                    initial={{ opacity: 0, x: 40 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.05 * i, duration: 0.2 }}
+                    transition={{ delay: 0.07 * i, duration: 0.28, ease: "easeOut" }}
                   >
                     <Link
                       href={href}
@@ -148,9 +150,9 @@ export function Navbar() {
                   </motion.li>
                 ))}
                 <motion.li
-                  initial={{ opacity: 0, x: 16 }}
+                  initial={{ opacity: 0, x: 40 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.25, duration: 0.2 }}
+                  transition={{ delay: 0.32, duration: 0.28, ease: "easeOut" }}
                   className="mt-4"
                 >
                   <Link

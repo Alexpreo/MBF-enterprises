@@ -4,7 +4,7 @@ import { PageTransition } from "@/components/PageTransition";
 import { ContactForm } from "@/components/ContactForm";
 
 export const metadata: Metadata = {
-  title: "Contact | MBF Enterprises",
+  title: "Contact | Buddy Landscaping",
   description:
     "Ready to transform your outdoor space? Get in touch for a consultation. Premium hardscaping, design, and construction.",
 };
@@ -27,8 +27,9 @@ export default function Contact() {
             <ContactForm />
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-text">Direct Contact</h2>
-            <ul className="mt-6 space-y-4 text-text-muted">
+            <h2 className="text-2xl font-semibold text-text">Direct Contact</h2>
+            <p className="mt-1 text-lg font-medium text-text">Jack Fang - Owner</p>
+            <ul className="mt-3 space-y-4 text-text-muted">
               <li className="flex items-center gap-3">
                 <Phone className="h-5 w-5 shrink-0 text-accent" aria-hidden />
                 <span>(778) 386-1862</span>

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
@@ -22,22 +22,28 @@ const cormorant = Cormorant_Garamond({
 
 const SITE_URL = "https://mbfenterprises.com";
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#0a0a0a",
+};
+
 export const metadata: Metadata = {
-  title: "MBF Enterprises | Premium Landscaping & Construction",
+  title: "Buddy Landscaping | Premium Landscaping & Construction",
   description:
     "Premium hardscaping, custom design, and flawless execution for properties that demand the best. High-end retaining walls, artificial turf, water features, and full exterior remodels.",
   metadataBase: new URL(SITE_URL),
   openGraph: {
-    title: "MBF Enterprises | Premium Landscaping & Construction",
+    title: "Buddy Landscaping | Premium Landscaping & Construction",
     description:
       "Premium hardscaping, custom design, and flawless execution for properties that demand the best.",
     url: SITE_URL,
-    siteName: "MBF Enterprises",
+    siteName: "Buddy Landscaping",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "MBF Enterprises | Premium Landscaping & Construction",
+    title: "Buddy Landscaping | Premium Landscaping & Construction",
     description:
       "Premium hardscaping, custom design, and flawless execution for properties that demand the best.",
   },
@@ -49,7 +55,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} min-h-screen bg-bg text-text antialiased font-sans`}
       >
