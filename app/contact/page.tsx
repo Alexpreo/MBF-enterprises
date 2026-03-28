@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Mail, Phone } from "lucide-react";
+import { AnimatedText } from "@/components/AnimatedText";
 import { PageTransition } from "@/components/PageTransition";
+import { ScrollReveal } from "@/components/ScrollReveal";
 import { ContactForm } from "@/components/ContactForm";
 
 export const metadata: Metadata = {
@@ -14,14 +16,15 @@ export default function Contact() {
     <PageTransition>
       <section className="flex min-h-[40vh] flex-col items-center justify-center px-4 py-20 sm:px-6 lg:px-8">
         <h1 className="text-center text-4xl font-bold tracking-tight text-text sm:text-5xl lg:text-6xl">
-          Get In Touch
+          <AnimatedText text="Get In Touch" className="block w-full text-center" />
         </h1>
         <p className="mt-6 max-w-2xl text-center text-lg text-text-muted">
           Ready to transform your outdoor space? We&apos;d love to hear from you.
         </p>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
+      <ScrollReveal>
+        <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="lg:max-w-lg">
             <ContactForm />
@@ -42,6 +45,7 @@ export default function Contact() {
           </div>
         </div>
       </section>
+      </ScrollReveal>
     </PageTransition>
   );
 }

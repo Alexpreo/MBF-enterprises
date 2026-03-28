@@ -46,8 +46,8 @@ export function ScrollReveal({ children, className = "" }: ScrollRevealProps) {
     <div
       ref={ref}
       data-scroll-reveal
-      className={`${className} transition-[opacity,transform] duration-500 ease-out ${
-        revealed ? "translate-y-0 opacity-100" : "translate-y-3 opacity-[0.97]"
+      className={`${className} transition-[opacity,transform] duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        revealed ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
       }`}
     >
       {children}

@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
+import { AnimatedText } from "@/components/AnimatedText";
 import { PageTransition } from "@/components/PageTransition";
+import { ScrollReveal } from "@/components/ScrollReveal";
 
 const CATEGORIES = ["All", "Hardscaping", "Turf", "Water Features"] as const;
 type Category = (typeof CATEGORIES)[number];
@@ -46,14 +48,15 @@ export default function Portfolio() {
     <PageTransition>
       <section className="flex min-h-[40vh] flex-col items-center justify-center px-4 py-20 sm:px-6 lg:px-8">
         <h1 className="text-center text-4xl font-bold tracking-tight text-text sm:text-5xl lg:text-6xl">
-          Our Work
+          <AnimatedText text="Our Work" className="block w-full text-center" />
         </h1>
         <p className="mt-6 max-w-2xl text-center text-lg text-text-muted">
           A selection of premium outdoor spaces we&apos;ve brought to life.
         </p>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
+      <ScrollReveal>
+        <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
         <div className="mb-8 flex flex-wrap justify-center gap-2">
           {CATEGORIES.map((cat) => (
             <button
@@ -95,6 +98,7 @@ export default function Portfolio() {
           </AnimatePresence>
         </div>
       </section>
+      </ScrollReveal>
 
       <AnimatePresence>
         {lightboxIndex !== null && (

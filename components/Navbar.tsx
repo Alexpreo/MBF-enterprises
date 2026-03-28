@@ -1,173 +1,106 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { FloatingNav } from "@/components/FloatingNav";
+import { LOGO_PUBLIC_PATH } from "@/lib/brand";
 
-const NAV_LINKS = [
-  { href: "/", label: "Home" },
-  { href: "/portfolio", label: "Portfolio" },
-  { href: "/services", label: "Services" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-];
+const SCROLL_TOP_THRESHOLD = 64;
+const SCROLL_DELTA = 10;
+
+const FADE_MS = 320;
+const FADE_EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
 
 export function Navbar() {
-  const pathname = usePathname();
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const lastScrollY = useRef(0);
+  const [brandChromeVisible, setBrandChromeVisible] = useState(true);
+  const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onChange = () => setReducedMotion(mq.matches);
+    onChange();
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  useEffect(() => {
+    lastScrollY.current = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (y < SCROLL_TOP_THRESHOLD) {
+        setBrandChromeVisible(true);
+      } else {
+        const delta = y - lastScrollY.current;
+        if (delta > SCROLL_DELTA) setBrandChromeVisible(false);
+        else if (delta < -SCROLL_DELTA) setBrandChromeVisible(true);
+      }
+      lastScrollY.current = y;
     };
-  }, [mobileOpen]);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [pathname]);
+  const fadeStyle = reducedMotion
+    ? undefined
+    : ({ transition: `opacity ${FADE_MS}ms ${FADE_EASE}` } as CSSProperties);
+
+  const brandVisibilityClass = brandChromeVisible
+    ? "opacity-100"
+    : "pointer-events-none opacity-0";
 
   return (
-    <>
-      <header
-        className="sticky top-0 z-[60] border-b border-white/5 bg-surface/80 backdrop-blur-md"
-        role="banner"
-      >
-        <nav
-          className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"
-          aria-label="Main navigation"
+    <header
+      className="pointer-events-none fixed inset-x-0 top-0 z-[60]"
+      style={{
+        paddingTop: "max(0.75rem, env(safe-area-inset-top, 0px))",
+      }}
+      role="banner"
+    >
+      <div className="relative mx-auto flex min-h-[4.25rem] max-w-7xl items-center px-3 sm:min-h-[4.75rem] sm:px-6 lg:px-8">
+        <div
+          className={`flex w-[min(12.5rem,36vw)] shrink-0 justify-start sm:w-[min(15rem,40vw)] ${brandVisibilityClass}`}
+          style={fadeStyle}
+          aria-hidden={!brandChromeVisible}
         >
           <Link
             href="/"
-            className="text-lg font-semibold tracking-tight text-text transition-colors hover:text-accent"
+            tabIndex={brandChromeVisible ? undefined : -1}
+            className="pointer-events-auto transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
           >
-            Buddy Landscaping
+            <span className="relative block h-14 w-[min(204px,calc(100vw-11rem))] sm:h-16 sm:w-[min(244px,calc(100vw-13rem))] lg:h-[4.5rem] lg:w-[min(288px,calc(100vw-15rem))]">
+              <Image
+                src={LOGO_PUBLIC_PATH}
+                alt="Buddy Landscaping"
+                fill
+                className="object-contain object-center"
+                priority
+                sizes="(max-width: 640px) 204px, (max-width: 1024px) 244px, 288px"
+              />
+            </span>
           </Link>
+        </div>
 
-          <ul className="hidden items-center gap-8 md:flex">
-            {NAV_LINKS.map(({ href, label }) => {
-              const isActive = pathname === href || (href !== "/" && pathname.startsWith(href));
-              return (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    className={`group relative text-sm font-medium transition-colors duration-200 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg ${
-                      isActive ? "text-accent" : "text-text-muted"
-                    }`}
-                  >
-                    {label}
-                    <span
-                      className={`absolute -bottom-1 left-0 h-px bg-accent transition-all duration-200 ${
-                        isActive ? "w-full" : "w-0 group-hover:w-full"
-                      }`}
-                      aria-hidden
-                    />
-                  </Link>
-                </li>
-              );
-            })}
-            <li className="hidden md:block">
-              <Link
-                href="/contact"
-                className="inline-flex min-h-[40px] items-center justify-center rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-bg shadow-[0_0_16px_rgba(212,175,55,0.2)] transition-all hover:bg-accent-light hover:shadow-[0_0_20px_rgba(212,175,55,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
-              >
-                Request a Consultation
-              </Link>
-            </li>
-          </ul>
+        <div className="pointer-events-none absolute inset-y-0 left-0 right-0 flex items-center justify-center">
+          <FloatingNav reducedMotion={reducedMotion} className="pointer-events-auto z-[58]" />
+        </div>
 
-          <button
-            type="button"
-            onClick={() => setMobileOpen(true)}
-            className="flex h-11 w-11 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-white/5 hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg md:hidden"
-            aria-label="Open menu"
+        <div
+          className={`ml-auto flex w-[min(12.5rem,36vw)] shrink-0 justify-end sm:w-[min(15rem,40vw)] ${brandVisibilityClass}`}
+          style={fadeStyle}
+          aria-hidden={!brandChromeVisible}
+        >
+          <Link
+            href="/contact"
+            tabIndex={brandChromeVisible ? undefined : -1}
+            className="pointer-events-auto inline-flex min-h-[44px] max-w-full items-center justify-center rounded-2xl bg-accent px-4 py-2.5 text-xs font-semibold text-bg shadow-[0_0_20px_rgba(212,175,55,0.25)] transition-all hover:bg-accent-light hover:shadow-[0_0_24px_rgba(212,175,55,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg sm:px-6 sm:py-3 sm:text-sm"
           >
-            <Menu className="h-6 w-6" />
-          </button>
-        </nav>
-      </header>
-
-      <AnimatePresence>
-        {mobileOpen && (
-          <>
-            <motion.div
-              key="mobile-menu-backdrop"
-              role="presentation"
-              className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm md:hidden"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              onClick={() => setMobileOpen(false)}
-              onKeyDown={(e) => e.key === "Escape" && setMobileOpen(false)}
-            />
-            <motion.aside
-              key="mobile-menu-drawer"
-              role="dialog"
-              aria-label="Mobile menu"
-              className="fixed right-0 top-0 z-[100] flex h-full w-full max-w-sm flex-col border-l border-white/5 bg-surface shadow-xl md:hidden"
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 220, damping: 26, mass: 0.95 }}
-            >
-              <div className="flex h-16 items-center justify-between px-4">
-                <span className="text-lg font-semibold text-text">Menu</span>
-                <button
-                  type="button"
-                  onClick={() => setMobileOpen(false)}
-                  className="flex h-11 w-11 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-white/5 hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
-                  aria-label="Close menu"
-                >
-                  <X className="h-6 w-6" />
-                </button>
-              </div>
-              <ul className="flex flex-col gap-1 px-4 py-6">
-                {NAV_LINKS.map(({ href, label }, i) => (
-                  <motion.li
-                    key={href}
-                    initial={{ opacity: 0, x: 40 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.07 * i, duration: 0.28, ease: "easeOut" }}
-                  >
-                    <Link
-                      href={href}
-                      className={`block rounded-lg px-4 py-3 text-base font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-surface ${
-                        pathname === href || (href !== "/" && pathname.startsWith(href))
-                          ? "bg-accent/10 text-accent"
-                          : "text-text-muted hover:bg-white/5 hover:text-text"
-                      }`}
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      {label}
-                    </Link>
-                  </motion.li>
-                ))}
-                <motion.li
-                  initial={{ opacity: 0, x: 40 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.32, duration: 0.28, ease: "easeOut" }}
-                  className="mt-4"
-                >
-                  <Link
-                    href="/contact"
-                    className="block rounded-lg bg-accent px-4 py-3 text-center text-base font-semibold text-bg transition-colors hover:bg-accent-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    Request a Consultation
-                  </Link>
-                </motion.li>
-              </ul>
-            </motion.aside>
-          </>
-        )}
-      </AnimatePresence>
-    </>
+            <span className="sm:hidden">Consult</span>
+            <span className="hidden sm:inline">Request a Consultation</span>
+          </Link>
+        </div>
+      </div>
+    </header>
   );
 }

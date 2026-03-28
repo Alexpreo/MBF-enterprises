@@ -65,7 +65,7 @@ export function Footer() {
         </div>
 
         <div className="mt-12 border-t border-white/5 pt-8 text-center text-sm text-text-muted">
-          &copy; {currentYear} MDF Enterprises. All rights reserved.
+          &copy; {currentYear} MBF Enterprises. All rights reserved.
         </div>
       </div>
     </footer>

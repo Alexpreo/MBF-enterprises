@@ -67,7 +67,7 @@ export default function About() {
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
             <div>
               <h2 className="text-2xl font-bold tracking-tight text-text sm:text-3xl lg:text-4xl">
-                Redefining the Standard of Construction.
+                <AnimatedText whenInView text="Redefining the Standard of Construction." />
               </h2>
             <p className="mt-6 text-base leading-relaxed text-text-muted">
               Buddy Landscaping was founded on a simple principle: outdoor construction should be built to outlast the elements and designed to inspire. We are a dedicated team of craftsmen, designers, and builders who treat every property as if it were our own.
@@ -90,7 +90,7 @@ export default function About() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-3xl text-center">
               <h2 className="text-2xl font-bold tracking-tight text-text sm:text-3xl lg:text-4xl">
-                What We&apos;re Known For
+                <AnimatedText whenInView text="What We're Known For" />
               </h2>
               <p className="mt-4 text-base leading-relaxed text-text-muted sm:text-lg">
                 We specialize in complete exterior transformations where structure, drainage, and finish quality all matter
@@ -118,7 +118,7 @@ export default function About() {
           <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16">
             <div>
               <h2 className="text-2xl font-bold tracking-tight text-text sm:text-3xl lg:text-4xl">
-                Our Build Process
+                <AnimatedText whenInView text="Our Build Process" />
               </h2>
               <p className="mt-5 max-w-2xl text-base leading-relaxed text-text-muted">
                 A premium result is driven by process discipline. We keep each phase structured so quality is predictable and

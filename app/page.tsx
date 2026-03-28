@@ -22,7 +22,7 @@ const FEATURED_ICONS: Record<FeaturedServiceId, LucideIcon> = {
 
 export default function Home() {
   return (
-    <PageTransition>
+    <PageTransition overlapFloatingNav>
       <section className="relative flex min-h-[90vh] flex-col items-center justify-center px-4 py-20 sm:px-6 lg:px-8">
         <div
           className="absolute inset-0 bg-surface bg-gradient-to-b from-accent/5 via-transparent to-bg"
@@ -71,7 +71,11 @@ export default function Home() {
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="text-2xl font-bold tracking-tight text-text sm:text-3xl lg:text-4xl">
-              Craftsmanship Without Compromise.
+              <AnimatedText
+                whenInView
+                text="Craftsmanship Without Compromise."
+                className="block w-full text-center"
+              />
             </h2>
             <p className="mt-6 text-base leading-relaxed text-text-muted sm:text-lg">
               At Buddy Landscaping, we don&apos;t just build landscapes; we engineer outdoor sanctuaries. Specializing in high-end hardscaping and complete exterior transformations, we bring architectural precision and premium materials to every project. From custom retaining walls to lush artificial turf and elegant water features, your vision is our blueprint.
@@ -87,18 +91,18 @@ export default function Home() {
       <ScrollReveal>
         <section className="border-y border-white/5 bg-surface/50 py-12 lg:py-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 gap-8 md:grid-cols-3 md:gap-12">
-              <div className="text-center">
-                <p className="text-3xl font-bold tabular-nums text-accent sm:text-4xl">15+</p>
-                <p className="mt-1 text-sm font-medium uppercase tracking-wider text-text-muted">Years in business</p>
+            <div className="grid grid-cols-2 place-items-center gap-8 md:grid-cols-3 md:gap-12">
+              <div className="flex w-full max-w-xs flex-col items-center justify-center text-center">
+                <p className="text-3xl font-bold leading-none tabular-nums text-accent sm:text-4xl">15+</p>
+                <p className="mt-2 text-sm font-medium uppercase tracking-wider text-text-muted">Years in business</p>
               </div>
-              <div className="text-center">
-                <p className="text-3xl font-bold tabular-nums text-accent sm:text-4xl">250+</p>
-                <p className="mt-1 text-sm font-medium uppercase tracking-wider text-text-muted">Projects completed</p>
+              <div className="flex w-full max-w-xs flex-col items-center justify-center text-center">
+                <p className="text-3xl font-bold leading-none tabular-nums text-accent sm:text-4xl">250+</p>
+                <p className="mt-2 text-sm font-medium uppercase tracking-wider text-text-muted">Projects completed</p>
               </div>
-              <div className="col-span-2 text-center md:col-span-1">
-                <p className="text-3xl font-bold tabular-nums text-accent sm:text-4xl">Metro Vancouver</p>
-                <p className="mt-1 text-sm font-medium uppercase tracking-wider text-text-muted">Service area</p>
+              <div className="col-span-2 flex w-full max-w-xs flex-col items-center justify-center text-center md:col-span-1">
+                <p className="text-3xl font-bold leading-none tabular-nums text-accent sm:text-4xl">Metro Vancouver</p>
+                <p className="mt-2 text-sm font-medium uppercase tracking-wider text-text-muted">Service area</p>
               </div>
             </div>
           </div>
@@ -109,7 +113,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
             <h2 className="text-center text-2xl font-bold tracking-tight text-text sm:text-3xl lg:text-4xl">
-              Our Services
+              <AnimatedText whenInView text="Our Services" className="block w-full text-center" />
             </h2>
           </ScrollReveal>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -137,7 +141,11 @@ export default function Home() {
         <section className="border-t border-white/5 bg-surface/50 py-16 lg:py-20">
           <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
             <p className="text-xl font-medium text-text sm:text-2xl">
-              Ready to transform your outdoor space?
+              <AnimatedText
+                whenInView
+                text="Ready to transform your outdoor space?"
+                className="block w-full text-center"
+              />
             </p>
             <div className="mt-6">
               <Link

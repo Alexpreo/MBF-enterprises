@@ -47,6 +47,14 @@ export const metadata: Metadata = {
     description:
       "Premium hardscaping, custom design, and flawless execution for properties that demand the best.",
   },
+  icons: {
+    icon: [
+      {
+        url: "/media/buddy%20landscaping%20logo-modified.png",
+        type: "image/png",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -61,7 +69,7 @@ export default function RootLayout({
       >
         <div className="flex min-h-screen flex-col">
           <Navbar />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 pt-0">{children}</main>
           <Footer />
         </div>
       </body>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { MessageCircle, PencilRuler, Hammer } from "lucide-react";
+import { AnimatedText } from "@/components/AnimatedText";
 import { PageTransition } from "@/components/PageTransition";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { SERVICE_CATEGORIES } from "@/data/services";
@@ -15,7 +16,7 @@ export default function Services() {
     <PageTransition>
       <section className="flex min-h-[40vh] flex-col items-center justify-center px-4 py-20 sm:px-6 lg:px-8">
         <h1 className="text-center text-4xl font-bold tracking-tight text-text sm:text-5xl lg:text-6xl">
-          Our Services
+          <AnimatedText text="Our Services" className="block w-full text-center" />
         </h1>
         <p className="mt-6 max-w-2xl text-center text-lg text-text-muted">
           High-end hardscaping, water, planting, and outdoor living—designed and built as one system.
