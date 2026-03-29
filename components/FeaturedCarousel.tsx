@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { FORCE_MUTED_VIDEO_PROPS } from "@/lib/video";
 
 const AUTO_ADVANCE_MS = 5000;
 const STORY_SECTION_ID = "project-story";
@@ -14,7 +15,7 @@ export type FeaturedSlide = {
   id: string;
   title: string;
   caption: string;
-  phase: "Hook" | "Design" | "Build" | "Finish" | "Reveal";
+  phase: "Hook" | "Design" | "Plans" | "Build" | "Finish" | "Reveal";
   imageSrc?: string;
   videoSrc?: string;
   posterSrc?: string;
@@ -160,13 +161,13 @@ export function FeaturedCarousel({ slides = DEFAULT_SLIDES }: FeaturedCarouselPr
           How We Build Signature Outdoor Spaces
         </h2>
         <p className="mt-4 text-base text-text-muted sm:text-lg">
-          Scroll the story, preview our process, and then explore full projects when your new photo and video library lands.
+          From first design moves through plans and build to the finished entry — a real project, step by step.
         </p>
       </div>
 
       <div className="relative mt-10 overflow-hidden rounded-2xl border border-white/10 bg-surface/60">
         <div className="grid items-stretch gap-0 lg:grid-cols-[1.35fr_1fr]">
-          <div className="relative aspect-[16/10] w-full lg:aspect-auto lg:min-h-[500px]">
+          <div className="relative flex w-full flex-col bg-gradient-to-b from-black/35 via-surface/90 to-black/45 aspect-[3/4] sm:aspect-[5/6] lg:aspect-auto lg:min-h-[min(72vh,560px)]">
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={slide.id}
@@ -174,14 +175,14 @@ export function FeaturedCarousel({ slides = DEFAULT_SLIDES }: FeaturedCarouselPr
                 animate={reducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
                 exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: -12 }}
                 transition={{ duration: reducedMotion ? 0.15 : 0.4, ease: "easeOut" }}
-                className="absolute inset-0"
+                className="absolute inset-0 p-3 sm:p-5 lg:p-6"
               >
                 {hasVideo ? (
                   <video
+                    {...FORCE_MUTED_VIDEO_PROPS}
                     key={slide.id}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-contain object-center"
                     autoPlay={!reducedMotion}
-                    muted
                     loop={!reducedMotion}
                     playsInline
                     preload="metadata"
@@ -191,15 +192,17 @@ export function FeaturedCarousel({ slides = DEFAULT_SLIDES }: FeaturedCarouselPr
                     <source src={slide.videoSrc} type="video/mp4" />
                   </video>
                 ) : slide.imageSrc ? (
-                  <Image
-                    src={slide.imageSrc}
-                    alt={slide.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 1024px) 100vw, 60vw"
-                    loading={index === 0 ? "eager" : "lazy"}
-                    priority={index === 0}
-                  />
+                  <div className="relative h-full min-h-[220px] w-full">
+                    <Image
+                      src={slide.imageSrc}
+                      alt={slide.title}
+                      fill
+                      className="object-contain object-center"
+                      sizes="(max-width: 1024px) 100vw, 60vw"
+                      loading={index === 0 ? "eager" : "lazy"}
+                      priority={index === 0}
+                    />
+                  </div>
                 ) : (
                   <div
                     className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-surface via-accent/10 to-surface"

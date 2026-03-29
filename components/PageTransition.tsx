@@ -1,7 +1,7 @@
 "use client";
 
 const FLOATING_NAV_CLEARANCE =
-  "pt-[max(6rem,calc(env(safe-area-inset-top,0px)+5.35rem))] sm:pt-[max(6.5rem,calc(env(safe-area-inset-top,0px)+5.85rem))]";
+  "pt-[max(5.75rem,calc(env(safe-area-inset-top,0px)+5rem))] md:pt-[max(6rem,calc(env(safe-area-inset-top,0px)+5.35rem))] lg:pt-[max(6.5rem,calc(env(safe-area-inset-top,0px)+5.85rem))]";
 
 /**
  * Plain wrapper — no transform/animation on the page root.

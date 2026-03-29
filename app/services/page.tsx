@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { MessageCircle, PencilRuler, Hammer } from "lucide-react";
 import { AnimatedText } from "@/components/AnimatedText";
 import { PageTransition } from "@/components/PageTransition";
 import { ScrollReveal } from "@/components/ScrollReveal";
+import { mediaUrl } from "@/data/portfolio-projects";
 import { SERVICE_CATEGORIES } from "@/data/services";
 
 export const metadata: Metadata = {
@@ -79,12 +81,26 @@ export default function Services() {
                 </ul>
               </div>
               <div
-                className={`aspect-[4/3] w-full shrink-0 rounded-xl border border-white/10 bg-surface bg-gradient-to-br from-surface via-accent/5 to-surface ${
+                className={`relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-xl border border-white/10 bg-surface bg-gradient-to-br from-surface via-accent/5 to-surface ${
                   index % 2 === 1 ? "lg:order-1" : ""
                 }`}
-                role="img"
-                aria-label={`${category.title} image placeholder`}
-              />
+              >
+                {category.media ? (
+                  <Image
+                    src={mediaUrl(category.media.file)}
+                    alt={category.media.alt}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                ) : (
+                  <div
+                    className="absolute inset-0 bg-gradient-to-br from-surface via-accent/5 to-surface"
+                    role="img"
+                    aria-label={`${category.title} — image coming soon`}
+                  />
+                )}
+              </div>
             </section>
           </ScrollReveal>
         ))}

@@ -11,12 +11,18 @@ export type ServiceCategory = {
   title: string;
   intro: string;
   bullets: string[];
+  /** Filename in /public/media when a current asset fits; omit to keep the gradient placeholder. */
+  media?: { file: string; alt: string };
 };
 
 export const SERVICE_CATEGORIES: ServiceCategory[] = [
   {
     id: "hardscape",
     title: "Hardscaping & Structural Work",
+    media: {
+      file: "gate design 8.jpg",
+      alt: "Finished gate and stone entry hardscape with clean joints and structural detailing.",
+    },
     intro:
       "Structural outdoor construction built for drainage, load, and longevity—then finished so every joint, edge, and transition reads clean from curb to courtyard.",
     bullets: [
@@ -52,6 +58,10 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
   {
     id: "water",
     title: "Water Features",
+    media: {
+      file: "beechwood 8.jpg",
+      alt: "Water fountain feature at a Beechwood residence landscape project.",
+    },
     intro:
       "Custom water from subtle movement to full aquatic focal points—engineered for clarity, sound, and dependable circulation.",
     bullets: [
@@ -68,6 +78,10 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
   {
     id: "softscape",
     title: "Softscape & Planting",
+    media: {
+      file: "beechwood 2.jpg",
+      alt: "Planting and softscape integrated with hardscape at a Beechwood residence project.",
+    },
     intro:
       "Living layers that soften structure, frame views, and perform in your microclimate—from instant lawn to layered beds that age beautifully.",
     bullets: [

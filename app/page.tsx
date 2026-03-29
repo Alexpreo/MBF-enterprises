@@ -7,6 +7,8 @@ import { ServiceCard } from "@/components/ServiceCard";
 import { AnimatedText } from "@/components/AnimatedText";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { FeaturedCarousel } from "@/components/FeaturedCarousel";
+import { HERO_VIDEO, STORY_RAIL_SLIDES } from "@/data/portfolio-projects";
+import { FORCE_MUTED_VIDEO_PROPS } from "@/lib/video";
 import { FEATURED_SERVICES, type FeaturedServiceId } from "@/data/services";
 import type { LucideIcon } from "lucide-react";
 import { Droplets, Flame, Hammer, LayoutGrid, Layers, Sprout } from "lucide-react";
@@ -23,11 +25,22 @@ const FEATURED_ICONS: Record<FeaturedServiceId, LucideIcon> = {
 export default function Home() {
   return (
     <PageTransition overlapFloatingNav>
-      <section className="relative flex min-h-[90vh] flex-col items-center justify-center px-4 py-20 sm:px-6 lg:px-8">
+      <section className="relative flex min-h-[90vh] flex-col items-center justify-center overflow-hidden px-4 py-20 sm:px-6 lg:px-8">
+        <video
+          {...FORCE_MUTED_VIDEO_PROPS}
+          className="absolute inset-0 z-0 h-full w-full object-cover"
+          autoPlay
+          loop
+          playsInline
+          preload="metadata"
+          poster={HERO_VIDEO.poster}
+          aria-hidden
+        >
+          <source src={HERO_VIDEO.src} type="video/mp4" />
+        </video>
         <div
-          className="absolute inset-0 bg-surface bg-gradient-to-b from-accent/5 via-transparent to-bg"
-          role="img"
-          aria-label="Hero background"
+          className="absolute inset-0 z-[1] bg-gradient-to-b from-bg/85 via-bg/55 to-bg"
+          aria-hidden
         />
         <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center text-center">
           <h1 className="w-full text-4xl font-bold tracking-tight text-text sm:text-5xl lg:text-6xl">
@@ -85,7 +98,7 @@ export default function Home() {
       </ScrollReveal>
 
       <ScrollReveal>
-        <FeaturedCarousel />
+        <FeaturedCarousel slides={STORY_RAIL_SLIDES} />
       </ScrollReveal>
 
       <ScrollReveal>

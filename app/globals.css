@@ -50,7 +50,13 @@ h1, h2, h3 {
 }
 
 [id] {
-  scroll-margin-top: 5rem;
+  scroll-margin-top: 6rem;
+}
+
+@media (min-width: 768px) {
+  [id] {
+    scroll-margin-top: 5.5rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
